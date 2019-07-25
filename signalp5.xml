@@ -1,0 +1,41 @@
+<tool id="signalp4" name="SignalP 4.1f" version="0.0.1">
+    <description>Find signal peptides in protein sequences</description>
+    <!-- If job splitting is enabled, break up the query file into parts -->
+    <!-- Using 2000 chunks meaning 4 threads doing 500 each is ideal -->
+    <parallelism method="basic" split_inputs="fasta_file" split_mode="to_size" split_size="2000" merge_outputs="tabular_file"></parallelism>
+    <command interpreter="bash">
+    run_signalp5.sh -batch 1000 -fasta ${fasta_file} -org ${organism} -stdout > ${tabular_file}
+      ## signalp3.py $organism $truncate "\$NSLOTS" $fasta_file $tabular_file
+      ##Set the number of threads in the runner entry in universe_wsgi.ini
+      ##which (on SGE at least) will set the $NSLOTS environment variable.
+      ##If the environment variable isn't set, get "", and the python wrapper
+      ##defaults to four threads.
+    </command>
+    <stdio>
+        <!-- Anything other than zero is an error -->
+        <exit_code range="1:" />
+        <exit_code range=":-1" />
+    </stdio>
+    <inputs>
+        <param name="fasta_file" type="data" format="fasta" label="FASTA file of protein sequences"/>
+        <param name="organism" type="select" display="radio" label="Organism">
+            <option value="euk">Eukaryote</option>
+            <option value="gram+">Gram positive</option>
+            <option value="gram-">Gram negative</option>
+        </param>
+        <param name="truncate" type="integer" label="Truncate sequences to this many amino acids" value="70" help="Use zero for no truncation, maximum value 6000">
+            <validator type="in_range" min="0" max="6000" message="Truncation value should be at most 6000. Use zero for no truncation."/>
+        </param>
+        <param name="noTM" type="float" label="User defined D-cutoff for noTM networks" value="0.450" help="Use the value of your choice, default: 0.450">
+        </param>
+        <param name="TM" type="float" label="User defined D-cutoff for TM networks" value="0.450" help="Use the value of your choice, default: 0.450">
+        </param>
+
+    </inputs>
+    <outputs>
+        <data name="tabular_file" format="tabular" label="SignalP $organism results" />
+    </outputs>
+    <requirements>
+        <requirement type="binary">signalp</requirement>
+    </requirements>
+</tool>
