@@ -2,7 +2,7 @@
     <description>Find signal peptides in protein sequences</description>
     <parallelism method="basic" split_inputs="fasta_file" split_mode="to_size" split_size="2000" merge_outputs="tabular_file"></parallelism>
     <command interpreter="bash">
-    run_signalp4.sh -t ${organism} -v -u ${noTM} -U ${TM} -c ${truncate} ${fasta_file} ${tabular_file}
+    run_signalp4.sh ${organism} ${noTM} ${TM} ${truncate} ${fasta_file} ${tabular_file}
     </command>
     <stdio>
         <!-- Anything other than zero is an error -->
