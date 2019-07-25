@@ -1,15 +1,8 @@
 <tool id="signalp4" name="SignalP 4.1f" version="0.0.1">
     <description>Find signal peptides in protein sequences</description>
-    <!-- If job splitting is enabled, break up the query file into parts -->
-    <!-- Using 2000 chunks meaning 4 threads doing 500 each is ideal -->
     <parallelism method="basic" split_inputs="fasta_file" split_mode="to_size" split_size="2000" merge_outputs="tabular_file"></parallelism>
     <command interpreter="bash">
     run_signalp4.sh -t ${organism} -v -u ${noTM} -U ${TM} -c ${truncate} ${fasta_file} ${tabular_file}
-      ## signalp3.py $organism $truncate "\$NSLOTS" $fasta_file $tabular_file
-      ##Set the number of threads in the runner entry in universe_wsgi.ini
-      ##which (on SGE at least) will set the $NSLOTS environment variable.
-      ##If the environment variable isn't set, get "", and the python wrapper
-      ##defaults to four threads.
     </command>
     <stdio>
         <!-- Anything other than zero is an error -->
