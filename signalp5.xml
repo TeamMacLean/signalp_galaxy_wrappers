@@ -1,4 +1,4 @@
-<tool id="signalp4" name="SignalP 4.1f" version="0.0.1">
+<tool id="signalp5" name="SignalP 5.0b" version="0.0.1">
     <description>Find signal peptides in protein sequences</description>
     <command interpreter="bash">
         run_signalp5.sh ${organism} ${fasta_file} ${tabular_file}
